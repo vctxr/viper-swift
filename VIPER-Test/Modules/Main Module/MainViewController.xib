@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController" customModule="VIPER_Test" customModuleProvider="target">
             <connections>
-                <outlet property="textLabel" destination="ZgT-8I-D5L" id="UoX-aM-Isc"/>
+                <outlet property="collectionView" destination="J6n-Tq-DrG" id="CfW-B7-Lvc"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -20,25 +20,34 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZgT-8I-D5L">
-                    <rect key="frame" x="186" y="437.5" width="42" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="J6n-Tq-DrG">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" systemColor="systemGray6Color"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" sectionInsetReference="safeArea" id="CgB-WR-tks">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="ZgT-8I-D5L" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="E2o-NV-8EO"/>
-                <constraint firstItem="ZgT-8I-D5L" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="nY6-Mr-c8J"/>
+                <constraint firstItem="J6n-Tq-DrG" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="9BP-Yn-YQ9"/>
+                <constraint firstItem="J6n-Tq-DrG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="XKo-gS-mMU"/>
+                <constraint firstAttribute="bottom" secondItem="J6n-Tq-DrG" secondAttribute="bottom" id="p6e-km-Dck"/>
+                <constraint firstItem="J6n-Tq-DrG" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="qMU-dw-dwp"/>
             </constraints>
-            <point key="canvasLocation" x="-196" y="95"/>
+            <point key="canvasLocation" x="-197.10144927536234" y="94.419642857142847"/>
         </view>
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -5,7 +5,7 @@
 //  Created by Victor Samuel Cuaca on 18/11/20.
 //
 
-import Foundation
+import UIKit
 
 final class MainRouter: Routerable {
     
@@ -22,8 +22,10 @@ struct MainModuleBuilder {
         let view = MainViewController()
         let interactor = MainInteractor()
         let router = MainRouter(view: view)
-        let presenter = MainPresenter(view: view, interactor: interactor, router: router)
+        let entity = MainEntity()
+        let presenter = MainPresenter(view: view, interactor: interactor, router: router, entity: entity)
         view.presenter = presenter
+        view.collectionViewDataSource = MainCollectionViewDataSource(entity: entity)
         interactor.presenter = presenter
         return view
     }

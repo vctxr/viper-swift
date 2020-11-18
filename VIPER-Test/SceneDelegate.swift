@@ -7,8 +7,6 @@
 
 import UIKit
 
-class viewcontroller: UIViewController{}
-
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -21,9 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        let nav = UINavigationController(rootViewController: viewcontroller())
+        let nav = UINavigationController(rootViewController: MainModuleBuilder.buildView())
         window?.rootViewController = nav
-        nav.pushViewController(MainModuleBuilder.buildView(), animated: true)
         window?.makeKeyAndVisible()
     }
 

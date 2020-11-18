@@ -8,14 +8,24 @@
 import Foundation
 
 protocol MainInteractorOutputs: AnyObject {
-    func onMessageFetched(message: String)
+    func onSuccessFetch(result: CharacterFetchResult)
+    func onFailureFetch(error: Error)
 }
 
 final class MainInteractor: Interactorable {
     
     weak var presenter: MainInteractorOutputs?
     
-    func fetchMessage() {
-        presenter?.onMessageFetched(message: "hello, viper")
+    func fetchCharacters(page: Int = 1) {
+        let request = RickAndMortyAPI.CharacterRequest(page: page)
+        
+        RickAndMortyAPI().fetchCharacter(with: request) { [weak self] (result: Result<CharacterFetchResult, APIError>) in
+            switch result {
+            case .success(let characterFetchResult):
+                self?.presenter?.onSuccessFetch(result: characterFetchResult)
+            case .failure(let error):
+                self?.presenter?.onFailureFetch(error: error)
+            }
+        }
     }
 }
