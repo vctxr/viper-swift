@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Welcome
+// MARK: - CharacterFetchResult
 struct CharacterFetchResult: Codable {
     let info: Info
     let characters: [RickAndMortyCharacter]
@@ -25,7 +25,7 @@ struct Info: Codable {
     let prev: String?
 }
 
-// MARK: - FetchResult
+// MARK: - RickAndMortyCharacter
 struct RickAndMortyCharacter: Codable, Equatable {
     let id: Int
     let name: String
