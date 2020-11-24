@@ -18,14 +18,17 @@ final class MainRouter: Routerable {
 
 struct MainModuleBuilder {
     
+    private static var storyboard: UIStoryboard {
+        return UIStoryboard(name: "Main", bundle: nil)
+    }
+    
     static func buildView() -> MainViewController {
-        let view = MainViewController()
-        let interactor = MainInteractor()
+        let view = storyboard.instantiateInitialViewController() as! MainViewController
         let router = MainRouter(view: view)
-        let entity = MainEntity()
-        let presenter = MainPresenter(view: view, interactor: interactor, router: router, entity: entity)
+        let interactor = MainInteractor(entity: MainEntity())
+        let presenter = MainPresenter(view: view, interactor: interactor, router: router)
         view.presenter = presenter
-        view.collectionViewDataSource = MainCollectionViewDataSource(entity: entity)
+        view.collectionViewDataSource = MainCollectionViewDataSource(characters: [])
         interactor.presenter = presenter
         return view
     }

@@ -10,13 +10,22 @@ import UIKit
 protocol MainViewOutputs: AnyObject {
     func viewDidLoad()
     func onReachBottom()
-    func onRefresh()
+    func refresh()
+    func search(with searchText: String)
+    func resetSearch()
+    func onTapFilter()
+    func filterCharacters(with status: Status?)
 }
 
 protocol MainViewInputs: AnyObject {
     func reloadCollectionView(dataSource: MainCollectionViewDataSource)
     func removeActivityIndicator()
-    func resetCollectionViewToOriginal()
+    func showActivityIndicator()
+    func showEmptyMessage()
+    func showConnectionError()
+    func showUnknownError()
+    func emptyCollectionViewData()
+    func showFilterAlert()
 }
 
 
@@ -29,19 +38,38 @@ final class MainViewController: UIViewController {
     private let footerSize = CGSize(width: 0, height: 60)
     private var collectionViewNeedsRefresh = false
         
+    @IBOutlet private var searchBar: UISearchBar!
     @IBOutlet private var collectionView: UICollectionView!
     private let refreshControl = UIRefreshControl()
+    private let errorView = ErrorView()
+
+    private var lastSearchedText = ""
+    private var selectedFilterIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationTitle(text: "Rick and Morty Characters")
+        setupSearchBar()
         setupCollectionView()
         setupRefreshControl()
         presenter?.viewDidLoad()
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        refreshControl.frame = CGRect(x: 0, y: -30, width: refreshControl.bounds.width, height: refreshControl.bounds.height)
+    }
+
+    @IBAction func didTapFilter(_ sender: Any) {
+        presenter?.onTapFilter()
     }
     
     @objc private func didPullToRefresh() {
         collectionViewNeedsRefresh = true
+    }
+    
+    @objc func didSearch(with searchText: String) {
+        presenter?.search(with: searchText)
     }
     
     deinit {
@@ -50,8 +78,14 @@ final class MainViewController: UIViewController {
     
     
     // MARK: - Helper Functions
-    private func setNavigationTitle(text: String) {
-        navigationItem.title = text
+    private func setupSearchBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .automatic
+        let searchController = UISearchController()
+        searchController.searchBar.placeholder = "Search for characters"
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
     }
     
     private func setupCollectionView() {
@@ -60,15 +94,9 @@ final class MainViewController: UIViewController {
         
         let footerCellNib = UINib(nibName: "FooterActivityIndicatorCollectionReusableView", bundle: nil)
         collectionView.register(footerCellNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterActivityIndicatorCollectionReusableView.identifier)
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
+
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let padding: CGFloat = 1
-            let itemWidth = (UIScreen.main.bounds.width - padding) / 2
-            layout.minimumInteritemSpacing = padding
-            layout.minimumLineSpacing = padding
+            let itemWidth = (UIScreen.main.bounds.width - 1) / 2
             layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
             layout.footerReferenceSize = footerSize
         }
@@ -78,6 +106,17 @@ final class MainViewController: UIViewController {
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
+    }
+    
+    func layoutErrorView() {
+        view.addSubview(self.errorView)
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            errorView.topAnchor.constraint(equalTo: view.topAnchor),
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            errorView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }
 
@@ -106,8 +145,24 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if collectionViewNeedsRefresh {
-            presenter?.onRefresh()
+            presenter?.refresh()
         }
+    }
+}
+
+
+// MARK: - Search Bar Delegate
+extension MainViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(didSearch), object: lastSearchedText)
+        lastSearchedText = searchText
+        perform(#selector(didSearch), with: searchText, afterDelay: 0.7)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text, !text.isEmpty else { return }
+        presenter?.resetSearch()
     }
 }
 
@@ -121,30 +176,78 @@ extension MainViewController: MainViewInputs {
         }
         
         // Only refresh if current datasource != new fetched datasource
-        guard collectionViewDataSource?.entity.characters != dataSource.entity.characters else { return }
+        guard collectionViewDataSource?.characters != dataSource.characters else { return }
 
         collectionViewDataSource = dataSource
         DispatchQueue.main.async {
+            self.errorView.removeFromSuperview()
             self.collectionView.isScrollEnabled = true
             self.collectionView.reloadData()
         }
     }
     
     func removeActivityIndicator() {
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.footerReferenceSize = .zero
+        DispatchQueue.main.async {
+            if let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.footerReferenceSize = .zero
+            }
         }
     }
     
-    func resetCollectionViewToOriginal() {
+    func showActivityIndicator() {
         collectionViewNeedsRefresh = false
         collectionView.contentInset = .zero
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.footerReferenceSize = footerSize
         }
     }
+    
+    func showFilterAlert() {
+        presentFilterSheet(title: "Filter by status", message: nil, selectedIndex: selectedFilterIndex) { [weak self] (selectedIndex) in
+            guard self?.selectedFilterIndex != selectedIndex else { return }
+            self?.selectedFilterIndex = selectedIndex
+            switch selectedIndex {
+            case 0:
+                self?.presenter?.filterCharacters(with: nil)
+            case 1:
+                self?.presenter?.filterCharacters(with: .alive)
+            case 2:
+                self?.presenter?.filterCharacters(with: .dead)
+            case 3:
+                self?.presenter?.filterCharacters(with: .unknown)
+            default:
+                break
+            }
+        }
+    }
+    
+    func emptyCollectionViewData() {
+        collectionViewDataSource?.characters = []
+        collectionView.reloadData()
+    }
+    
+    func showEmptyMessage() {
+        DispatchQueue.main.async {
+            self.errorView.configure(with: "No Results", subtitle: "Try a new search.")
+            self.layoutErrorView()
+        }
+    }
+    
+    func showConnectionError() {
+        DispatchQueue.main.async {
+            self.errorView.configure(with: "You're Offline", subtitle: "Turn off Airplane Mode or connect to Wi-Fi")
+            self.layoutErrorView()
+        }
+    }
+    
+    func showUnknownError() {
+        DispatchQueue.main.async {
+            self.errorView.configure(with: "Unknown Error", subtitle: "Please try again.")
+            self.layoutErrorView()
+        }
+    }
 }
 
 
 // MARK: - Viewable
-extension MainViewController: Viewable {}
+extension MainViewController: Viewable, Alertable {}

@@ -12,7 +12,6 @@
 		5748EC612564A8FA0018F250 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5748EC602564A8FA0018F250 /* Assets.xcassets */; };
 		5748EC642564A8FA0018F250 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5748EC622564A8FA0018F250 /* LaunchScreen.storyboard */; };
 		5748EC712564A9C40018F250 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5748EC6F2564A9C40018F250 /* MainViewController.swift */; };
-		5748EC722564A9C40018F250 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5748EC702564A9C40018F250 /* MainViewController.xib */; };
 		5748EC7E2564AC9E0018F250 /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5748EC7D2564AC9E0018F250 /* MainRouter.swift */; };
 		5748EC822564AD0C0018F250 /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5748EC812564AD0C0018F250 /* MainPresenter.swift */; };
 		5748EC852564AD150018F250 /* MainInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5748EC842564AD150018F250 /* MainInteractor.swift */; };
@@ -32,6 +31,11 @@
 		57967FEB2565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57967FE92565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.swift */; };
 		57967FEC2565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57967FEA2565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.xib */; };
 		57C79CAB256527F0004B36CD /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C79CAA256527F0004B36CD /* APICaller.swift */; };
+		57F610E0256CF35C0054BB68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F610DF256CF35C0054BB68 /* Main.storyboard */; };
+		57F610E3256D21E60054BB68 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F610E2256D21E60054BB68 /* ErrorView.swift */; };
+		57F610EF256D30950054BB68 /* StringProtocol+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F610EE256D30950054BB68 /* StringProtocol+Extensions.swift */; };
+		57F610F3256D32E10054BB68 /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F610F2256D32E10054BB68 /* Alertable.swift */; };
+		57F610F6256D42440054BB68 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F610F5256D42440054BB68 /* UIAlertController+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +46,6 @@
 		5748EC632564A8FA0018F250 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5748EC652564A8FA0018F250 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5748EC6F2564A9C40018F250 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		5748EC702564A9C40018F250 /* MainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		5748EC7D2564AC9E0018F250 /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		5748EC812564AD0C0018F250 /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		5748EC842564AD150018F250 /* MainInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteractor.swift; sourceTree = "<group>"; };
@@ -62,6 +65,11 @@
 		57967FE92565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterActivityIndicatorCollectionReusableView.swift; sourceTree = "<group>"; };
 		57967FEA2565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FooterActivityIndicatorCollectionReusableView.xib; sourceTree = "<group>"; };
 		57C79CAA256527F0004B36CD /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
+		57F610DF256CF35C0054BB68 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		57F610E2256D21E60054BB68 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		57F610EE256D30950054BB68 /* StringProtocol+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringProtocol+Extensions.swift"; sourceTree = "<group>"; };
+		57F610F2256D32E10054BB68 /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
+		57F610F5256D42440054BB68 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +130,7 @@
 				5748EC842564AD150018F250 /* MainInteractor.swift */,
 				5748EC872564AD240018F250 /* MainEntity.swift */,
 				5748EC7D2564AC9E0018F250 /* MainRouter.swift */,
-				5748EC702564A9C40018F250 /* MainViewController.xib */,
+				57F610DF256CF35C0054BB68 /* Main.storyboard */,
 				5748ECC42564E5480018F250 /* Views */,
 			);
 			path = "Main Module";
@@ -145,6 +153,7 @@
 				5748EC8B2564ADF00018F250 /* Presenterable.swift */,
 				5748EC8F2564ADF90018F250 /* Interactorable.swift */,
 				5748EC952564AE0A0018F250 /* Routerable.swift */,
+				57F610F2256D32E10054BB68 /* Alertable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -182,6 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				5748ECBE2564DFA20018F250 /* Collection+Extensions.swift */,
+				57F610EE256D30950054BB68 /* StringProtocol+Extensions.swift */,
+				57F610F5256D42440054BB68 /* UIAlertController+Extensions.swift */,
 				57967FE62565102C007D9ADF /* UIDevice+Extensions.swift */,
 			);
 			path = Extensions;
@@ -191,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				5748ECC52564E57D0018F250 /* AsyncLoadedImageView.swift */,
+				57F610E2256D21E60054BB68 /* ErrorView.swift */,
 				5748EC9A2564C4AF0018F250 /* Cells */,
 			);
 			path = Views;
@@ -254,10 +266,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				57967FEC2565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.xib in Resources */,
+				57F610E0256CF35C0054BB68 /* Main.storyboard in Resources */,
 				5748ECA32564C4DF0018F250 /* CharacterCollectionViewCell.xib in Resources */,
 				5748EC642564A8FA0018F250 /* LaunchScreen.storyboard in Resources */,
 				5748EC612564A8FA0018F250 /* Assets.xcassets in Resources */,
-				5748EC722564A9C40018F250 /* MainViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,11 +288,15 @@
 				5748ECC22564E0A30018F250 /* MainCollectionViewDataSource.swift in Sources */,
 				57967FE72565102C007D9ADF /* UIDevice+Extensions.swift in Sources */,
 				5748EC932564AE030018F250 /* Viewable.swift in Sources */,
+				57F610F3256D32E10054BB68 /* Alertable.swift in Sources */,
 				5748EC8C2564ADF00018F250 /* Presenterable.swift in Sources */,
+				57F610F6256D42440054BB68 /* UIAlertController+Extensions.swift in Sources */,
 				5748EC582564A8F80018F250 /* AppDelegate.swift in Sources */,
+				57F610EF256D30950054BB68 /* StringProtocol+Extensions.swift in Sources */,
 				5748EC902564ADF90018F250 /* Interactorable.swift in Sources */,
 				5748ECAD2564CA160018F250 /* CharacterFetchResult.swift in Sources */,
 				5748EC7E2564AC9E0018F250 /* MainRouter.swift in Sources */,
+				57F610E3256D21E60054BB68 /* ErrorView.swift in Sources */,
 				5748EC5A2564A8F80018F250 /* SceneDelegate.swift in Sources */,
 				57967FEB2565133A007D9ADF /* FooterActivityIndicatorCollectionReusableView.swift in Sources */,
 				5748ECBA2564D6390018F250 /* RickAndMortyAPI.swift in Sources */,

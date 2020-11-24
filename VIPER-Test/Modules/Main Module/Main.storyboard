@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C8c-WI-345">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Rick and Morty API-->
+        <scene sceneID="6cW-QU-iSq">
+            <objects>
+                <viewController id="C8c-WI-345" customClass="MainViewController" customModule="VIPER_Test" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cvk-2K-UrR">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lwX-Cf-sDB">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="0SB-bF-Xtt">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="C8c-WI-345" id="Gzp-M9-UPe"/>
+                                    <outlet property="delegate" destination="C8c-WI-345" id="NN6-jP-sp6"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cIP-OM-5bx"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lwX-Cf-sDB" firstAttribute="top" secondItem="cvk-2K-UrR" secondAttribute="top" id="IxE-2b-ZrY"/>
+                            <constraint firstAttribute="bottom" secondItem="lwX-Cf-sDB" secondAttribute="bottom" id="JVS-Lk-Fn4"/>
+                            <constraint firstItem="lwX-Cf-sDB" firstAttribute="leading" secondItem="cIP-OM-5bx" secondAttribute="leading" id="UJR-Rk-TOU"/>
+                            <constraint firstItem="lwX-Cf-sDB" firstAttribute="trailing" secondItem="cIP-OM-5bx" secondAttribute="trailing" id="UaR-0g-xH5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Rick and Morty API" id="7am-wh-0ro">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="line.horizontal.3.decrease.circle" catalog="system" id="3CJ-xa-rBf">
+                            <connections>
+                                <action selector="didTapFilter:" destination="C8c-WI-345" id="imL-9h-Pzb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="collectionView" destination="lwX-Cf-sDB" id="bSU-Xf-THA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UOz-qk-dxY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-179.71014492753625" y="-2.0089285714285712"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="line.horizontal.3.decrease.circle" catalog="system" width="128" height="121"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

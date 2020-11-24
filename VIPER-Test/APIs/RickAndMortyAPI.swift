@@ -18,7 +18,7 @@ struct RickAndMortyAPI {
         }
         
         /// The request's parameters (ex. name=rick&status=alive)
-        var params: [(key: String, value: String)]
+        var params: [String: String]
     }
     
     /// Fetch characters from the API with the specified page number (default value is 1).

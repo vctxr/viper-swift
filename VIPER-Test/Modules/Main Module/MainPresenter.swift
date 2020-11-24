@@ -12,13 +12,11 @@ final class MainPresenter: Presenterable {
     private weak var view: MainViewInputs!
     private(set) var interactor: MainInteractor
     private(set) var router: MainRouter
-    private var entity: MainEntity
     
-    init(view: MainViewInputs, interactor: MainInteractor, router: MainRouter, entity: MainEntity) {
+    init(view: MainViewInputs, interactor: MainInteractor, router: MainRouter) {
         self.view = view
         self.interactor = interactor
         self.router = router
-        self.entity = entity
     }
 }
 
@@ -27,44 +25,77 @@ final class MainPresenter: Presenterable {
 extension MainPresenter: MainViewOutputs {
     
     func viewDidLoad() {
-        startFetching()
+        interactor.fetchCharacters()
     }
     
     func onReachBottom() {
-        guard entity.pageCount < entity.maxPage else {
-            view.removeActivityIndicator()
-            return
+        interactor.fetchCharacters()
+    }
+    
+    func refresh() {
+        view.showActivityIndicator()
+        interactor.resetEntity()
+        interactor.fetchCharacters()
+    }
+    
+    func search(with searchText: String) {
+        resetView()
+        
+        if searchText.isEmpty {
+            interactor.fetchCharacters(parameters: ["name": nil])
+        } else {
+            interactor.fetchCharacters(parameters: ["name": searchText.removingAllWhitespaces])
         }
-        startFetching()
     }
     
-    func onRefresh() {
-        ImageCacher.shared.imageCache.removeAllObjects()
-        entity.characters.removeAll()
-        entity.pageCount = 1
-        view.resetCollectionViewToOriginal()
-        startFetching()
+    func resetSearch() {
+        resetView()
+        interactor.fetchCharacters(parameters: ["name": nil])
     }
     
-    private func startFetching() {
-        guard !entity.isFetching else { return }
-        entity.isFetching = true
-        interactor.fetchCharacters(page: entity.pageCount)
+    func onTapFilter() {
+        view.showFilterAlert()
+    }
+    
+    func filterCharacters(with status: Status?) {
+        resetView()
+        if let status = status {
+            interactor.fetchCharacters(parameters: ["status": status.rawValue.lowercased()])
+        } else {
+            interactor.fetchCharacters(parameters: ["status": nil])
+        }
+    }
+    
+    private func resetView() {
+        view.emptyCollectionViewData()
+        view.showActivityIndicator()
+        interactor.resetEntity()
     }
 }
+
 
 // MARK: - Main Interactor Outputs
 extension MainPresenter: MainInteractorOutputs {
     
-    func onSuccessFetch(result: CharacterFetchResult) {
-        entity.isFetching = false
-        entity.pageCount += 1
-        entity.maxPage = result.info.pages
-        entity.characters.append(contentsOf: result.characters)
-        view.reloadCollectionView(dataSource: MainCollectionViewDataSource(entity: entity))
+    func onSuccessFetch(characters: [RickAndMortyCharacter]) {
+        view.reloadCollectionView(dataSource: MainCollectionViewDataSource(characters: characters))
     }
     
-    func onFailureFetch(error: Error) {
-        entity.isFetching = false
+    func onFailureFetch(error: APIError) {
+        switch error {
+        case .failedToParse:
+            print("Failed to parse")
+            view.showUnknownError()
+        case .receiveNilData:
+            print("Receive nil data")
+            view.showConnectionError()
+        case .statusCodeError(let statusCode):
+            print("Error status code: \(statusCode)")
+            view.showEmptyMessage()
+        }
+    }
+    
+    func onReachMaxPageCount() {
+        view.removeActivityIndicator()
     }
 }

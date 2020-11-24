@@ -9,15 +9,15 @@ import UIKit
 
 struct MainCollectionViewDataSource {
     
-    let entity: MainEntity
+    var characters: [RickAndMortyCharacter]
     
     /// The number of items of the character
     var numberOfItems: Int {
-        return entity.characters.count
+        return characters.count
     }
     
     func cellForItem(in collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let character = entity.characters[safe: indexPath.row],
+        guard let character = characters[safe: indexPath.row],
               let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCollectionViewCell.identifier, for: indexPath) as? CharacterCollectionViewCell
         else { return UICollectionViewCell() }
         

@@ -13,16 +13,15 @@ enum HTTPMethod: String {
 }
 
 enum APIError: Error {
-    case statusCodeError
+    case statusCodeError(statusCode: Int)
     case receiveNilData
     case failedToParse
 }
 
 protocol Request {
     var url: String { get }
-    var params: [(key: String, value: String)] { get }
+    var params: [String: String] { get }
 }
-
 
 /// A Struct  that handles API calls.
 struct APICaller {
@@ -49,9 +48,9 @@ struct APICaller {
                 return completion(.failure(.receiveNilData))
             }
             
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200..<300) ~= httpResponse.statusCode else {
-                return completion(.failure(.statusCodeError))
+            let httpResponse = response as! HTTPURLResponse
+            guard (200..<300) ~= httpResponse.statusCode else {
+                return completion(.failure(.statusCodeError(statusCode: httpResponse.statusCode)))
             }
             
             completion(.success(data))
@@ -95,7 +94,7 @@ struct URLRequestCreator {
 struct URLEncoder {
     
     /// Encodes the URL parameters to a single string (ex.: name=rick&status=alive)
-    static func encode(params: [(key: String, value: String)]) -> String {
+    static func encode(params: [String: String]) -> String {
         let encodedString = params.compactMap({ "\($0.key)=\($0.value)" }).joined(separator: "&")
         return encodedString
     }
