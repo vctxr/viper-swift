@@ -14,7 +14,7 @@ final class ImageCacher {
     
     private init() {}
     
-    let imageCache = NSCache<AnyObject, AnyObject>()
+    let imageCache = NSCache<NSString, NSData>()
 }
 
 /// A custom image view subclass to load images from cache or asynchronously
@@ -32,16 +32,15 @@ final class AsyncLoadedImageView: UIImageView {
             task.cancel()
         }
         
-        if let cachedImage = ImageCacher.shared.imageCache.object(forKey: url.absoluteString as AnyObject) as? UIImage {
-            image = cachedImage
+        if let cachedImageData = ImageCacher.shared.imageCache.object(forKey: url.absoluteString as NSString) {
+            image = UIImage(data: cachedImageData as Data)
             return
         }
         
         task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data, let newImage = UIImage(data: data), error == nil else { return }
+            guard let imageData = data, let newImage = UIImage(data: imageData), error == nil else { return }
             
-            ImageCacher.shared.imageCache.setObject(newImage, forKey: url.absoluteString as AnyObject)
-            
+            ImageCacher.shared.imageCache.setObject(imageData as NSData, forKey: url.absoluteString as NSString)
             DispatchQueue.main.async {
                 self.image = newImage
             }

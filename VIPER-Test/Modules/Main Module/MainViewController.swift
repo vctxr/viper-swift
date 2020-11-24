@@ -14,12 +14,9 @@ protocol MainViewOutputs: AnyObject {
 }
 
 protocol MainViewInputs: AnyObject {
-    func setNavigationTitle(text: String)
     func reloadCollectionView(dataSource: MainCollectionViewDataSource)
     func removeActivityIndicator()
     func resetCollectionViewToOriginal()
-    func setupCollectionView()
-    func setupRefreshControl()
 }
 
 
@@ -28,6 +25,7 @@ final class MainViewController: UIViewController {
     
     var presenter: MainViewOutputs?
     var collectionViewDataSource: MainCollectionViewDataSource?
+    
     private let footerSize = CGSize(width: 0, height: 60)
     private var collectionViewNeedsRefresh = false
         
@@ -36,6 +34,9 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNavigationTitle(text: "Rick and Morty Characters")
+        setupCollectionView()
+        setupRefreshControl()
         presenter?.viewDidLoad()
     }
     
@@ -45,6 +46,38 @@ final class MainViewController: UIViewController {
     
     deinit {
         print("Deinit")
+    }
+    
+    
+    // MARK: - Helper Functions
+    private func setNavigationTitle(text: String) {
+        navigationItem.title = text
+    }
+    
+    private func setupCollectionView() {
+        let characterCellNib = UINib(nibName: "CharacterCollectionViewCell", bundle: nil)
+        collectionView.register(characterCellNib, forCellWithReuseIdentifier: CharacterCollectionViewCell.identifier)
+        
+        let footerCellNib = UINib(nibName: "FooterActivityIndicatorCollectionReusableView", bundle: nil)
+        collectionView.register(footerCellNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterActivityIndicatorCollectionReusableView.identifier)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let padding: CGFloat = 1
+            let itemWidth = (UIScreen.main.bounds.width - padding) / 2
+            layout.minimumInteritemSpacing = padding
+            layout.minimumLineSpacing = padding
+            layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
+            layout.footerReferenceSize = footerSize
+        }
+    }
+    
+    private func setupRefreshControl() {
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
     }
 }
 
@@ -82,14 +115,11 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 // MARK: - Main View Presenter Inputs
 extension MainViewController: MainViewInputs {
     
-    func setNavigationTitle(text: String) {
-        navigationItem.title = text
-    }
-    
     func reloadCollectionView(dataSource: MainCollectionViewDataSource) {
         DispatchQueue.main.async {
             self.refreshControl.endRefreshing()
         }
+        
         // Only refresh if current datasource != new fetched datasource
         guard collectionViewDataSource?.entity.characters != dataSource.entity.characters else { return }
 
@@ -101,7 +131,6 @@ extension MainViewController: MainViewInputs {
     }
     
     func removeActivityIndicator() {
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.footerReferenceSize = .zero
         }
@@ -113,29 +142,6 @@ extension MainViewController: MainViewInputs {
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.footerReferenceSize = footerSize
         }
-    }
-    
-    func setupCollectionView() {
-        let characterCellNib = UINib(nibName: "CharacterCollectionViewCell", bundle: nil)
-        collectionView.register(characterCellNib, forCellWithReuseIdentifier: CharacterCollectionViewCell.identifier)
-        
-        let footerCellNib = UINib(nibName: "FooterActivityIndicatorCollectionReusableView", bundle: nil)
-        collectionView.register(footerCellNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterActivityIndicatorCollectionReusableView.identifier)
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let itemWidth = (UIScreen.main.bounds.width) / 2
-            layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-            layout.footerReferenceSize = footerSize
-        }
-    }
-    
-    func setupRefreshControl() {
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
     }
 }
 

@@ -27,9 +27,6 @@ final class MainPresenter: Presenterable {
 extension MainPresenter: MainViewOutputs {
     
     func viewDidLoad() {
-        view.setNavigationTitle(text: "Rick and Morty Characters")
-        view.setupCollectionView()
-        view.setupRefreshControl()
         startFetching()
     }
     

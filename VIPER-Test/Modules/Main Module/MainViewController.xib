@@ -39,6 +39,7 @@
                 <constraint firstAttribute="bottom" secondItem="J6n-Tq-DrG" secondAttribute="bottom" id="p6e-km-Dck"/>
                 <constraint firstItem="J6n-Tq-DrG" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="qMU-dw-dwp"/>
             </constraints>
+            <nil key="simulatedTopBarMetrics"/>
             <point key="canvasLocation" x="-197.10144927536234" y="94.419642857142847"/>
         </view>
     </objects>

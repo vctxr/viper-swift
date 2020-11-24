@@ -17,7 +17,11 @@ final class MainInteractor: Interactorable {
     weak var presenter: MainInteractorOutputs?
     
     func fetchCharacters(page: Int = 1) {
-        let request = RickAndMortyAPI.CharacterRequest(page: page)
+        let params = [
+            (key: "page", value: "\(page)")
+        ]
+        
+        let request = RickAndMortyAPI.CharacterRequest(params: params)
         
         RickAndMortyAPI().fetchCharacter(with: request) { [weak self] (result: Result<CharacterFetchResult, APIError>) in
             switch result {

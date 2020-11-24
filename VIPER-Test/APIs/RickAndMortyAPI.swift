@@ -17,13 +17,8 @@ struct RickAndMortyAPI {
             return baseURLString + "/character"
         }
         
-        var params: [(key: String, value: String)] {
-            return [
-                (key: "page", value: "\(page)")
-            ]
-        }
-        
-        let page: Int
+        /// The request's parameters (ex. name=rick&status=alive)
+        var params: [(key: String, value: String)]
     }
     
     /// Fetch characters from the API with the specified page number (default value is 1).
