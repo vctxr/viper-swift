@@ -9,7 +9,14 @@ iOS app for searching Rick and Morty Characters. Built using UIKit and VIPER arc
 
 > **Note:** The VIPER architecture implemented in this app is **NOT** a strict VIPER architecture as I am still learning this architecture and there may be some things that is different from the original VIPER.
 
-# ✨ Features
+# 🎁 Demo
+
+<p float="left">
+  <img src="/Assets/infinite-scroll.gif" width="300" height="auto" hspace="50"/>
+  <img src="/Assets/search.gif" width="300" height="auto" hspace="50"/>
+</p>
+
+# 🍉 Features
 
 - Fetch data from the API
 - Infinite scrolling to fetch more data from the API
