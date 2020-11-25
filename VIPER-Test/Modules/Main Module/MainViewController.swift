@@ -10,6 +10,7 @@ import UIKit
 protocol MainViewOutputs: AnyObject {
     func viewDidLoad()
     func onReachBottom()
+    func onReachTop()
     func refresh()
     func search(with searchText: String)
     func resetSearch()
@@ -26,6 +27,7 @@ protocol MainViewInputs: AnyObject {
     func showUnknownError()
     func emptyCollectionViewData()
     func showFilterAlert()
+    func resetCollectionViewContentOffset()
 }
 
 
@@ -37,6 +39,7 @@ final class MainViewController: UIViewController {
     
     private let footerSize = CGSize(width: 0, height: 60)
     private var collectionViewNeedsRefresh = false
+    private var collectionViewInitialOffset: CGFloat = 0
         
     @IBOutlet private var searchBar: UISearchBar!
     @IBOutlet private var collectionView: UICollectionView!
@@ -52,12 +55,11 @@ final class MainViewController: UIViewController {
         setupCollectionView()
         setupRefreshControl()
         presenter?.viewDidLoad()
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        refreshControl.frame = CGRect(x: 0, y: -30, width: refreshControl.bounds.width, height: refreshControl.bounds.height)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        collectionViewInitialOffset = -(UIDevice.current.safeAreaTopHeight + (navigationController?.navigationBar.frame.height ?? 0))
     }
 
     @IBAction func didTapFilter(_ sender: Any) {
@@ -79,9 +81,8 @@ final class MainViewController: UIViewController {
     
     // MARK: - Helper Functions
     private func setupSearchBar() {
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .automatic
-        let searchController = UISearchController()
+        let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "Search for characters"
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -94,7 +95,7 @@ final class MainViewController: UIViewController {
         
         let footerCellNib = UINib(nibName: "FooterActivityIndicatorCollectionReusableView", bundle: nil)
         collectionView.register(footerCellNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterActivityIndicatorCollectionReusableView.identifier)
-
+        
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let itemWidth = (UIScreen.main.bounds.width - 1) / 2
             layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
@@ -103,7 +104,7 @@ final class MainViewController: UIViewController {
     }
     
     private func setupRefreshControl() {
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel])
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
     }
@@ -140,6 +141,11 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         let yOffset = scrollView.contentOffset.y
         if yOffset > scrollView.contentSize.height - scrollView.frame.height {
             presenter?.onReachBottom()
+        }
+
+        // iOS bug when tapping status bar (scroll to top gesture) then tapping search bar will result in collectionview offset not properly calculated. This line makes sure that when that gesture is performed, the collectionview content offset is calculated properly.
+        if yOffset == (collectionViewInitialOffset + 2) && !collectionView.isTracking {
+            presenter?.onReachTop()
         }
     }
     
@@ -245,6 +251,10 @@ extension MainViewController: MainViewInputs {
             self.errorView.configure(with: "Unknown Error", subtitle: "Please try again.")
             self.layoutErrorView()
         }
+    }
+    
+    func resetCollectionViewContentOffset() {
+        collectionView.setContentOffset(CGPoint(x: 0, y: collectionViewInitialOffset), animated: true)
     }
 }
 

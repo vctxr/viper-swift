@@ -32,6 +32,10 @@ extension MainPresenter: MainViewOutputs {
         interactor.fetchCharacters()
     }
     
+    func onReachTop() {
+        view.resetCollectionViewContentOffset()
+    }
+    
     func refresh() {
         view.showActivityIndicator()
         interactor.resetEntity()
